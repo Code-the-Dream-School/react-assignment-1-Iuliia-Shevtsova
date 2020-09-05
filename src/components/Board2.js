@@ -43,7 +43,7 @@ class Board extends Component {
             this.setState( prevState => ({
                 value: prevState.cells[index].value = 'X',
                 click_count: prevState.cells[index].click_count +=1,
-                //winner: prevState.winner = this.winner('X')
+                // winner: prevState.winner = this.winner('X')
             })); 
         } else if (this.props.turn === 2) {
             this.setState( prevState => ({
@@ -56,8 +56,12 @@ class Board extends Component {
     winner = (value) => {
         
         let cells = this.state.cells;
+        console.log(cells)
+        // this.setState( prevState => ({
+        //     winner: prevState.winner = this.winner(value)
+        // }));
         if (value !== '') {
-            console.log('value = ', value);
+            console.log('Winner check function. Cell value = ', value);
             if ((cells[0].value === value && cells[0].value === cells[1].value && cells[0].value === cells[2].value)
             || (cells[3].value === value && cells[3].value === cells[4].value && cells[3].value === cells[5].value)
             || (cells[6].value === value && cells[6].value === cells[7].value && cells[6].value === cells[8].value)
@@ -82,30 +86,28 @@ class Board extends Component {
     // }
  
     render(){
-        var cells = this.state.cells.map( (cell) =>
-            <Cell 
-                id={cell.id}
-                value={cell.value}
-                key={cell.key}
-                changeValue={this.handleValueChange}
-                index={cell.id}
-                turn = {this.props.turn}
-                changeTurn={this.props.changeTurn}
-                click_count={cell.click_count}
-                //winner_check={this.state.winner}
-                winner_check={this.winner}
-               // winner_check={cell.value !== '' ? this.winner(cell.value): ''}
-            />
-        ) 
-        //this.winner('X');
-
-        console.log(cells)
         return(
-            <div className='board'>
-                {this.fill_board(cells)}
+            <div className='board'>               
+                {this.fill_board(
+                    this.state.cells.map( (cell) =>
+                        <Cell 
+                            id={cell.id}
+                            value={cell.value}
+                            key={cell.key}
+                            changeValue={this.handleValueChange}
+                            index={cell.id}
+                            turn = {this.props.turn}
+                            changeTurn={this.props.changeTurn}
+                            click_count={cell.click_count}
+                            winner_check={this.winner}
+                        />
+                    )
+                )}
                 
             </div>
+            
         );
+        
     }
 }
 

@@ -28,6 +28,13 @@ code {
   align-items: center
 }
 
+.start{
+  padding-bottom: 4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
 .niceFont{
   font-family: 'Architects Daughter', cursive;
 }
