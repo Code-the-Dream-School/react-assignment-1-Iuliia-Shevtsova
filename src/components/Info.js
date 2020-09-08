@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Board2 from './Board2';
+import PropTypes from 'prop-types';
+import Board from './Board';
 import o from '../images/0.png'
 import x from '../images/1.png'
 
@@ -8,7 +9,12 @@ class Info extends Component{
 
   state={
     startClick: false,
-    startGameClick: false
+    startGameClick: false,
+    newGameClick: false,
+    resetGameClick: false,
+    cellsValue: '',
+    cellsImage: <div />,
+    //turn: this.props.turn
   }
 
   player1_Input = React.createRef();
@@ -17,14 +23,48 @@ class Info extends Component{
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.players_names(this.player1_Input.current.value, this.player2_Input.current.value); //because of ref
-    this.setState({startGameClick: true})
+    this.setState({
+      startGameClick: true,
+      newGameClick: false,
+      resetGameClick: false,
+      // cellsValue: '',
+      // cellsImage: '',
+      //turn: this.state.turn
+    })
   }
   
   start_click = () => {
     this.setState({startClick: true})
   }
 
+  newGame_Click = () => {
+    this.setState({
+      newGameClick: true,
+      startGameClick: false,
+      resetGameClick: false
+    })
+  }
+
+  resetGame_Click = () => {
+    this.setState({
+      resetGameClick: true,
+      // cellsValue: '',
+      // cellsImage: true,
+      // turn: 1
+      //startGameClick: false
+    })
+  }
+
   render(){
+
+    const {
+        player1,
+        player2,
+        turn,
+        changeTurn,
+        cells_click
+    } = this.props
+
     if (this.state.startClick === false) {
       return(
       
@@ -32,7 +72,7 @@ class Info extends Component{
           <button className="btn cell niceFont px-3 py-2" onClick={this.start_click}>Start</button>
         </div>
       )
-    } else if (this.state.startGameClick === false) {
+    } else if (this.state.startGameClick === false || this.state.newGameClick === true) {
       return(
         <div className="center">
           <div className='together' >
@@ -49,7 +89,7 @@ class Info extends Component{
             <button className="btn cell niceFont px-3 py-2" onClick={this.handleSubmit}>Start game</button>
           </div>
       )
-    } else if (this.state.startGameClick === true) {
+    } else if (this.state.startGameClick === true || this.state.resetGameClick === true) {
       return(
         <div>
           <div className='together' >
@@ -57,22 +97,34 @@ class Info extends Component{
           <label className='niceFont'><img className="icon" src={o} alt="O"/> {this.props.player2} </label>
           </div>
 
-          <Board2 
-            turn={this.props.turn}
-            changeTurn={this.props.changeTurn}
-            cells_click={this.props.cells_click}
+          <Board 
+            turn={turn}
+            changeTurn={changeTurn}
+            cells_click={cells_click}
+            player1={player1}
+            player2={player2}
+            cellsValue={this.state.cellsValue}
+            cellsImage={this.state.cellsImage}
           />
  
         <div className='together' >
-        <button className="btn cell niceFont px-3 py-2" >New game</button>
-        <button className="btn cell niceFont px-3 py-2" >Reset</button>
+        <button className="btn cell niceFont px-3 py-2" onClick={this.newGame_Click}>New game </button>
+        <button className="btn cell niceFont px-3 py-2" onClick={this.resetGame_Click}>Reset</button>
           </div>
         </div> 
       )
     }
-    
+
   }
 }
 
+Info.propTypes = {
+  players_names: PropTypes.func,
+  player1: PropTypes.string,
+  player2: PropTypes.string,
+  turn: PropTypes.number,
+  changeTurn: PropTypes.func,
+  cells_click: PropTypes.number
+}
 
 export default Info;
